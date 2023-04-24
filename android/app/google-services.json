@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "572204096348",
+    "project_id": "anglaralogin",
+    "storage_bucket": "anglaralogin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572204096348:android:735fa4602e87e55ea3bf99",
+        "android_client_info": {
+          "package_name": "com.example.anglara_ecommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572204096348-ujhjr7qg5o2od4nte3rt284ci4jhmvbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO-z6y5tUyj4mPZAmwgNki2OlhIZDusJA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572204096348-ujhjr7qg5o2od4nte3rt284ci4jhmvbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
