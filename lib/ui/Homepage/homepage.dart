@@ -35,11 +35,13 @@ class HomePageLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(children: const [
-          SizedBox(height: 8),
-          BannerWidget(),
-          CategoryWidget(),
-        ]),
+        child: Column(
+          children: const [
+            SizedBox(height: 8),
+            BannerWidget(),
+            CategoryWidget(),
+          ],
+        ),
       ),
     );
   }
@@ -58,19 +60,16 @@ class BannerWidget extends StatelessWidget {
               int index = state.banner.indexOf(i);
               return Builder(
                 builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () async {},
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 25.0, left: 8),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  state.banner[index].downloadUrl!),
-                              fit: BoxFit.fill),
-                        ),
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 25.0, left: 8),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image:
+                                NetworkImage(state.banner[index].downloadUrl!),
+                            fit: BoxFit.fill),
                       ),
                     ),
                   );
@@ -119,6 +118,7 @@ class CategoryWidget extends StatelessWidget {
             child: GridView.builder(
               itemCount: state.category.length,
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
@@ -127,12 +127,13 @@ class CategoryWidget extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                      return ProductPage(
-                          category: state.category[index]
-                              .toString()
-                              .toUpperCase());
-                    },));
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context) {
+                        return ProductPage(
+                            category:
+                                state.category[index].toString().toUpperCase());
+                      },
+                    ));
                   },
                   radius: 10,
                   child: Container(
