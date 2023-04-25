@@ -31,8 +31,38 @@ class _CartScreenState extends State<CartScreen> {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        CartRepository().removeFromCart(index);
-                        setState(() {});
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Remove Item"),
+                              content: const Text(
+                                  "Are you sure you want to remove this item?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("No"),
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      CartRepository().removeFromCart(index);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: const Text(
+                                            'Successfully removed item from your cart'),
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                      ));
+                                      setState(() {});
+                                    },
+                                    child: const Text("Yes"))
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   );

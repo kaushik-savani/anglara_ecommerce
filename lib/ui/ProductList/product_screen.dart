@@ -103,6 +103,12 @@ class _ProductPageState extends State<ProductPage> {
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     await CartRepository().addToCart(product);
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      content: const Text('Item added to cart'),
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10)),
+                                    ));
                                   },
                                   child: const Text('Add to cart'),
                                 ),
