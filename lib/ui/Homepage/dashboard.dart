@@ -1,11 +1,13 @@
 import 'package:anglara_ecommerce/ui/CartPage/cart_screen.dart';
 import 'package:anglara_ecommerce/ui/Homepage/profil_screen.dart';
 import 'package:anglara_ecommerce/ui/Login/login_screen.dart';
+import 'package:anglara_ecommerce/ui/ProductList/product_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
 import '../../repository/cart_repository.dart';
+import '../../repository/category_repository.dart';
 import 'homepage.dart';
 
 class Dashboard extends StatefulWidget {
@@ -18,6 +20,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
   int _cartItemCount = 0;
+  List categoriesName = [];
 
   User? _user;
   static const List<Widget> _widgetOptions = <Widget>[
@@ -47,12 +50,32 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  Future<void> _fetchCategoriesName() async {
+    try {
+      final List categories = await CategoryRepository().FetchAllCategory();
+      setState(() {
+        categoriesName = categories;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ANGLARA"),
         centerTitle: false,
+        leading: Builder(builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              _fetchCategoriesName();
+              Scaffold.of(context).openDrawer();
+            },
+            child: Icon(Icons.menu),
+          );
+        }),
         actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
       ),
       drawer: Drawer(
@@ -61,10 +84,18 @@ class _DashboardState extends State<Dashboard> {
             UserAccountsDrawerHeader(
                 accountName: Text(_user!.displayName ?? ''),
                 accountEmail: Text(_user!.email ?? '')),
-            ListTile(onTap: () {}, title: const Text("Electronics")),
-            ListTile(onTap: () {}, title: const Text("Jewelery")),
-            ListTile(onTap: () {}, title: const Text("Men's Clothing")),
-            ListTile(onTap: () {}, title: const Text("Women's Clothing")),
+            if (categoriesName.isNotEmpty)
+              for (String category in categoriesName)
+                ListTile(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductPage(category: category),
+                        ));
+                  },
+                  title: Text(category),
+                ),
             ListTile(
                 onTap: () {
                   FirebaseAuth.instance.signOut();
@@ -78,7 +109,10 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationWidget(cartItemCount: _cartItemCount,selectedIndex: _selectedIndex,onItemTapped: _onItemTapped),
+      bottomNavigationBar: BottomNavigationWidget(
+          cartItemCount: _cartItemCount,
+          selectedIndex: _selectedIndex,
+          onItemTapped: _onItemTapped),
       body: _selectedIndex == 1
           ? CartScreen(onItemRemoved: _updateCartItemCount)
           : _widgetOptions.elementAt(_selectedIndex),
@@ -92,7 +126,10 @@ class BottomNavigationWidget extends StatefulWidget {
   final void Function(int) onItemTapped;
 
   const BottomNavigationWidget(
-      {Key? key, required this.cartItemCount, required this.selectedIndex, required this.onItemTapped})
+      {Key? key,
+      required this.cartItemCount,
+      required this.selectedIndex,
+      required this.onItemTapped})
       : super(key: key);
 
   @override
@@ -127,4 +164,3 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     );
   }
 }
-
