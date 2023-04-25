@@ -3,7 +3,9 @@ import 'package:anglara_ecommerce/repository/cart_repository.dart';
 import '../../model/product_model.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  final VoidCallback? onItemRemoved;
+
+  const CartScreen({Key? key, this.onItemRemoved}) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -41,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text("No"),
+                                  child: const Text("No"),
                                 ),
                                 TextButton(
                                     onPressed: () {
@@ -56,6 +58,7 @@ class _CartScreenState extends State<CartScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                       ));
+                                      widget.onItemRemoved!();
                                       setState(() {});
                                     },
                                     child: const Text("Yes"))
